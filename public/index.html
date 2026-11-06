@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LẤY MAIL | PASS</title>
+<style>
+  /* ... Giữ nguyên toàn bộ CSS cũ ... */
+  :root{
+    --bg:#080d0b; --card:#101a14; --line:#1f3428; --text:#f2fff6;
+    --muted:#91a096; --green:#39f58a; --blue:#58a6ff; --red:#ff6b81;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    min-height:100vh;padding:24px 16px;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at top,#163b27 0%,transparent 60%),var(--bg);
+    color:var(--text);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  .wrap{width:100%;max-width:440px}
+  .logo{
+    width:64px;height:64px;margin:0 auto 14px;display:grid;place-items:center;
+    border:1px solid #39f58a55;border-radius:18px;background:#39f58a12;
+    color:var(--green);font-size:30px;font-weight:900;
+  }
+  h1{text-align:center;font-size:22px;letter-spacing:2px;margin-bottom:6px}
+  h1 span{color:var(--green)}
+  .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:22px}
+  #btn{
+    width:100%;height:56px;border:0;border-radius:14px;
+    background:linear-gradient(100deg,#39f58a,#1fbf6a);color:#06120a;
+    font-size:16px;font-weight:900;letter-spacing:1px;cursor:pointer;
+    transition:transform .15s,filter .15s;box-shadow:0 8px 24px #39f58a30;
+  }
+  #btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.08)}
+  #btn:active:not(:disabled){transform:scale(.98)}
+  #btn:disabled{opacity:.6;cursor:wait}
+  #box{margin-top:16px;display:none}
+  #box.show{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .field{
+    padding:14px;margin-bottom:10px;border:1px solid var(--line);border-radius:12px;
+    background:var(--card);
+  }
+  .field-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-bottom:6px;font-weight:700}
+  .field-value{
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;font-weight:800;
+    color:var(--green);word-break:break-all;
+  }
+  .field-value.pass{color:var(--blue)}
+  .field-row{display:flex;gap:8px;align-items:center}
+  .field-row .field-value{flex:1}
+  .copy-btn{
+    padding:6px 12px;border:1px solid var(--line);border-radius:8px;
+    background:#1a2620;color:var(--text);font-size:11px;font-weight:700;
+    cursor:pointer;white-space:nowrap;transition:background .2s;
+  }
+  .copy-btn:hover{background:#25352c}
+  .copy-btn.ok{background:#39f58a30;border-color:var(--green);color:var(--green)}
+  .all-btn{
+    width:100%;height:46px;margin-top:8px;border:1px solid var(--green);
+    border-radius:12px;background:transparent;color:var(--green);
+    font-size:13px;font-weight:800;letter-spacing:1px;cursor:pointer;
+    transition:background .2s;
+  }
+  .all-btn:hover{background:#39f58a15}
+  #msg{margin-top:14px;padding:12px;border-radius:10px;font-size:13px;
+    text-align:center;display:none;line-height:1.5}
+  #msg.show{display:block}
+  #msg.err{background:#ff6b8115;border:1px solid #ff6b8140;color:var(--red)}
+  #msg.info{background:#58a6ff15;border:1px solid #58a6ff40;color:var(--blue)}
+  #msg.ok{background:#39f58a15;border:1px solid #39f58a40;color:var(--green)}
+  #link4m{display:none;margin-top:10px;text-align:center}
+  #link4m.show{display:block}
+  #link4m a{
+    display:inline-block;padding:12px 22px;border-radius:10px;
+    background:var(--blue);color:#001428;text-decoration:none;
+    font-weight:800;font-size:13px;letter-spacing:1px;
+  }
+  .client-info{
+    margin-top:10px;font-size:10px;color:#4a5c51;
+    text-align:center;font-family:ui-monospace,monospace;
+    word-break:break-all;line-height:1.6;
+  }
+  .client-info b{color:var(--green)}
+  .foot{margin-top:22px;text-align:center;font-size:10px;color:#4a5c51;letter-spacing:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">K</div>
+  <h1>LẤY <span>MAIL | PASS</span></h1>
+  <p class="sub">1 nút · create-link → get-key</p>
+  <button id="btn">⚡ LẤY NGAY</button>
+  <div id="box">
+    <div class="field">
+      <div class="field-label">📧 MAIL</div>
+      <div class="field-row">
+        <div class="field-value" id="outMail">—</div>
+        <button class="copy-btn" onclick="copy('outMail',this)">Copy</button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">🔑 PASSWORD</div>
+      <div class="field-row">
+        <div class="field-value pass" id="outPass">—</div>
+        <button class="copy-btn" onclick="copy('outPass',this)">Copy</button>
+      </div>
+    </div>
+    <button class="all-btn" onclick="copyAll(this)">📋 COPY TOÀN BỘ (mail|pass)</button>
+  </div>
+  <div id="msg"></div>
+  <div id="link4m"><a id="link4mHref" href="#" target="_blank" rel="noopener noreferrer">👉 MỞ LINK4M ĐỂ LẤY LƯỢT</a></div>
+  <div class="client-info" id="clientInfo"></div>
+  <div class="foot">KEY CENTER · Full-Stack</div>
+</div>
+<script>
+"use strict";
+
+// Để trống vì API và HTML chung một domain
+const PROXY_SERVER = ""; 
+
+const $ = id => document.getElementById(id);
+
+function generateClientId(){
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    const r = Math.random()*16|0;
+    return (c==="x" ? r : (r&0x3|0x8)).toString(16);
+  });
+}
+
+async function callFn(name, payload){
+  const url = `${PROXY_SERVER}/proxy/${name}`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  let data;
+  try { data = await res.json(); }
+  catch { throw new Error(`Lỗi Server (${res.status})`); }
+  
+  if (!res.ok) throw new Error(data.message || data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+function showMsg(text, type){ $("msg").textContent = text; $("msg").className = "show " + (type || "info"); }
+function hideMsg(){ $("msg").className = ""; }
+function hideLink4M(){ $("link4m").classList.remove("show"); }
+
+function showResult(mail, pass, raw){
+  $("outMail").textContent = mail || "(trống)";
+  $("outPass").textContent = pass || "(trống)";
+  $("outMail").dataset.raw = raw;
+  $("box").classList.add("show");
+  hideMsg();
+  showMsg("✅ Lấy thành công!", "ok");
+}
+
+function showLink4M(url){
+  $("link4mHref").href = url;
+  $("link4m").classList.add("show");
+}
+
+async function copy(id, btn){
+  const el = $(id);
+  const text = el.dataset.raw || el.textContent;
+  if (!text || text === "—") return;
+  try {
+    await navigator.clipboard.writeText(text);
+    const old = btn.textContent;
+    btn.textContent = "✓";
+    btn.classList.add("ok");
+    setTimeout(() => { btn.textContent = old; btn.classList.remove("ok"); }, 1500);
+  } catch { showMsg("Không cho copy tự động.", "err"); }
+}
+
+async function copyAll(btn){
+  const mail = $("outMail").dataset.raw || $("outMail").textContent;
+  const pass = $("outPass").textContent;
+  if (!mail || mail === "—") return;
+  const text = `${mail}|${pass}`;
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = "✓ ĐÃ COPY " + text;
+    btn.style.background = "#39f58a20";
+    setTimeout(() => { btn.textContent = "📋 COPY TOÀN BỘ (mail|pass)"; btn.style.background = ""; }, 2000);
+  } catch { showMsg("Trình duyệt chặn copy.", "err"); }
+}
+
+async function run(){
+  const btn = $("btn");
+  btn.disabled = true;
+  btn.textContent = "⏳ ĐANG LẤY...";
+  $("box").classList.remove("show");
+  hideMsg(); hideLink4M(); $("clientInfo").textContent = "";
+
+  try {
+    const clientId = generateClientId();
+    $("clientInfo").textContent = `clientId: ${clientId}`;
+
+    const linkRes = await callFn("create-link", { clientId });
+    if (!linkRes.success) throw new Error(linkRes.message || "create-link thất bại");
+    const shortUrl = linkRes.shortenedUrl || linkRes.shortened_url || linkRes.url;
+
+    let keyRes;
+    try {
+      keyRes = await callFn("get-key", { clientId });
+    } catch (e) {
+      if (shortUrl) {
+        showLink4M(shortUrl);
+        showMsg("Cần mở Link4M hoàn thành nhiệm vụ. Xong quay lại bấm LẤY NGAY lần nữa.", "info");
+      } else throw e;
+      return;
+    }
+
+    if (!keyRes.success || !keyRes.content) {
+      if (shortUrl) {
+        showLink4M(shortUrl);
+        showMsg("Chưa có nội dung. Mở Link4M hoàn thành rồi thử lại.", "info");
+      } else throw new Error(keyRes.message || "get-key thất bại");
+      return;
+    }
+
+    const raw = String(keyRes.content).trim();
+    const parts = raw.split("|");
+    showResult(parts[0].trim(), parts.slice(1).join("|").trim(), raw);
+
+  } catch (e) {
+    showMsg("❌ " + (e.message || "Lỗi kết nối Server"), "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "⚡ LẤY NGAY";
+  }
+}
+
+$("btn").addEventListener("click", run);
+</script>
+</body>
+</html>

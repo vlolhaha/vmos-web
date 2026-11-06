@@ -5,118 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LẤY MAIL | PASS</title>
 <style>
-  :root{
-    --bg:#080d0b; --card:#101a14; --line:#1f3428; --text:#f2fff6;
-    --muted:#91a096; --green:#39f58a; --blue:#58a6ff; --red:#ff6b81;
-  }
+  :root{ --bg:#080d0b; --card:#101a14; --line:#1f3428; --text:#f2fff6; --muted:#91a096; --green:#39f58a; --blue:#58a6ff; --red:#ff6b81; }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    min-height:100vh;padding:24px 16px;
-    display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(ellipse at top,#163b27 0%,transparent 60%),var(--bg);
-    color:var(--text);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-    position: relative;
-  }
+  body{ min-height:100vh;padding:24px 16px; display:flex;align-items:center;justify-content:center; background:radial-gradient(ellipse at top,#163b27 0%,transparent 60%),var(--bg); color:var(--text);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif; position: relative; }
   .wrap{width:100%;max-width:440px; z-index: 1;}
-  .logo{
-    width:64px;height:64px;margin:0 auto 14px;display:grid;place-items:center;
-    border:1px solid #39f58a55;border-radius:18px;background:#39f58a12;
-    color:var(--green);font-size:30px;font-weight:900;
-  }
+  .logo{ width:64px;height:64px;margin:0 auto 14px;display:grid;place-items:center; border:1px solid #39f58a55;border-radius:18px;background:#39f58a12; color:var(--green);font-size:30px;font-weight:900; }
   h1{text-align:center;font-size:22px;letter-spacing:2px;margin-bottom:6px}
   h1 span{color:var(--green)}
   .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:22px}
-  
-  .field{
-    padding:12px;margin-bottom:12px;border:1px solid var(--line);border-radius:12px;
-    background:var(--card);
-  }
+  .field{ padding:12px;margin-bottom:12px;border:1px solid var(--line);border-radius:12px; background:var(--card); }
   .field-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-bottom:6px;font-weight:700}
-  .field-value{
-    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;font-weight:800;
-    color:var(--green);word-break:break-all;
-  }
+  .field-value{ font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;font-weight:800; color:var(--green);word-break:break-all; }
   .field-value.pass{color:var(--blue)}
   .field-row{display:flex;gap:8px;align-items:center}
-  
-  input.token-input {
-    width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); 
-    background: #0a0e14; color: var(--text); font-family: monospace; outline: none;
-  }
+  input.token-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: #0a0e14; color: var(--text); font-family: monospace; outline: none; }
   input.token-input:focus { border-color: var(--green); }
-
-  #btn{
-    width:100%;height:56px;border:0;border-radius:14px;
-    background:linear-gradient(100deg,#39f58a,#1fbf6a);color:#06120a;
-    font-size:16px;font-weight:900;letter-spacing:1px;cursor:pointer;
-    transition:transform .15s,filter .15s;box-shadow:0 8px 24px #39f58a30;
-  }
+  #btn{ width:100%;height:56px;border:0;border-radius:14px; background:linear-gradient(100deg,#39f58a,#1fbf6a);color:#06120a; font-size:16px;font-weight:900;letter-spacing:1px;cursor:pointer; transition:transform .15s,filter .15s;box-shadow:0 8px 24px #39f58a30; }
   #btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.08)}
   #btn:disabled{opacity:.6;cursor:wait}
-
   #box{margin-top:16px;display:none}
   #box.show{display:block;animation:fade .35s ease}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  
-  .copy-btn{
-    padding:6px 12px;border:1px solid var(--line);border-radius:8px;
-    background:#1a2620;color:var(--text);font-size:11px;font-weight:700;
-    cursor:pointer;white-space:nowrap;transition:background .2s;
-  }
+  .copy-btn{ padding:6px 12px;border:1px solid var(--line);border-radius:8px; background:#1a2620;color:var(--text);font-size:11px;font-weight:700; cursor:pointer;white-space:nowrap;transition:background .2s; }
   .copy-btn:hover{background:#25352c}
   .copy-btn.ok{background:#39f58a30;border-color:var(--green);color:var(--green)}
-  
-  #msg{margin-top:14px;padding:12px;border-radius:10px;font-size:13px;
-    text-align:center;display:none;line-height:1.5}
+  #msg{margin-top:14px;padding:12px;border-radius:10px;font-size:13px; text-align:center;display:none;line-height:1.5}
   #msg.show{display:block}
   #msg.err{background:#ff6b8115;border:1px solid #ff6b8140;color:var(--red)}
-  #msg.info{background:#58a6ff15;border:1px solid #58a6ff40;color:var(--blue)}
   #msg.ok{background:#39f58a15;border:1px solid #39f58a40;color:var(--green)}
-
-  /* ADMIN MODAL */
-  #adminBtn {
-    position: absolute; top: 15px; right: 15px; background: transparent; border: none;
-    color: #4a5c51; font-size: 20px; cursor: pointer; z-index: 10;
-  }
+  #adminBtn { position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: #4a5c51; font-size: 20px; cursor: pointer; z-index: 10; }
   #adminBtn:hover { color: var(--green); }
-  
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-    display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;
-  }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
   .modal-overlay.show { display: flex; }
-  .modal-content {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-    padding: 24px; width: 100%; max-width: 400px; text-align: center;
-  }
+  .modal-content { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; text-align: center; }
   .modal-content h3 { color: var(--green); margin-bottom: 15px; }
-  .modal-content input {
-    width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
-    border: 1px solid var(--line); background: #0a0e14; color: white; font-size: 16px; outline: none;
-  }
-  .modal-content button {
-    width: 100%; padding: 12px; border: none; border-radius: 8px;
-    background: var(--green); color: black; font-weight: bold; cursor: pointer;
-  }
+  .modal-content input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--line); background: #0a0e14; color: white; font-size: 16px; outline: none; }
+  .modal-content button { width: 100%; padding: 12px; border: none; border-radius: 8px; background: var(--green); color: black; font-weight: bold; cursor: pointer; }
   .modal-content button:disabled { opacity: 0.5; cursor: wait; }
 </style>
 </head>
 <body>
-
 <button id="adminBtn" title="Admin Mode">⚙️</button>
-
 <div class="wrap">
   <div class="logo">K</div>
   <h1>LẤY <span>MAIL | PASS</span></h1>
-  <p class="sub">1 nút · create-link → get-key</p>
-
+  <p class="sub">Nhập Token để lấy mail | pass</p>
   <div class="field">
     <div class="field-label">🔐 ACCESS TOKEN (Dùng 1 lần)</div>
     <input type="text" id="accessToken" class="token-input" placeholder="Nhập use-...">
   </div>
-
   <button id="btn">⚡ LẤY NGAY</button>
-
   <div id="box">
     <div class="field">
       <div class="field-label">📧 MAIL</div>
@@ -134,11 +72,9 @@
     </div>
     <button class="copy-btn" style="width:100%;margin-top:8px;padding:12px" onclick="copyAll(this)">📋 COPY TOÀN BỘ (mail|pass)</button>
   </div>
-
   <div id="msg"></div>
 </div>
 
-<!-- MODAL ADMIN -->
 <div class="modal-overlay" id="adminModal">
   <div class="modal-content">
     <div id="step1">
@@ -159,9 +95,14 @@
 "use strict";
 const $ = id => document.getElementById(id);
 
+// Tạo UUID v4 (Dài, chuẩn format Supabase)
 function generateClientId(){
-  return crypto.randomUUID ? crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
-    const r = Math.random()*16|0; return (c==="x" ? r : (r&0x3|0x8)).toString(16);
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
   });
 }
 
@@ -211,15 +152,11 @@ async function copyAll(btn){
   } catch { showMsg("Trình duyệt chặn copy.", "err"); }
 }
 
-// FLOW CHÍNH
 async function run(){
   const btn = $("btn");
   const accessToken = $("accessToken").value.trim();
   
-  if (!accessToken) {
-    showMsg("Vui lòng nhập Access Token!", "err");
-    return;
-  }
+  if (!accessToken) { showMsg("Vui lòng nhập Access Token!", "err"); return; }
 
   btn.disabled = true;
   btn.textContent = "⏳ ĐANG LẤY...";
@@ -227,37 +164,16 @@ async function run(){
   $("msg").className = "";
 
   try {
-    const clientId = generateClientId();
-    
-    // Gửi token lên server kiểm tra
-    const linkRes = await callFn("create-link", { clientId, accessToken });
-    
-    if (!linkRes.success) throw new Error(linkRes.message || "Lỗi tạo link");
-    const shortUrl = linkRes.shortenedUrl || linkRes.url;
+    const clientId = generateClientId(); // Sinh UUID v4
+    const keyRes = await callFn("get-key", { clientId, accessToken });
 
-    let keyRes;
-    try {
-      // Vì token đã bị xóa sau bước 1, ta không cần gửi token nữa
-      keyRes = await callFn("get-key", { clientId });
-    } catch (e) {
-      if (shortUrl) {
-        showMsg("Cần mở Link4M hoàn thành nhiệm vụ. Xong quay lại bấm LẤY NGAY lần nữa.", "info");
-        const a = document.createElement("a"); a.href = shortUrl; a.target = "_blank";
-        a.innerText = "👉 MỞ LINK4M"; a.style = "display:block;margin-top:10px;color:var(--blue);text-decoration:none;font-weight:bold;";
-        $("msg").appendChild(a);
-      } else throw e;
-      return;
-    }
-
-    if (!keyRes.success || !keyRes.content) throw new Error("Chưa có dữ liệu");
+    if (!keyRes.success || !keyRes.content) throw new Error(keyRes.message || "Chưa có dữ liệu.");
 
     const raw = String(keyRes.content).trim();
     const parts = raw.split("|");
     showResult(parts[0].trim(), parts.slice(1).join("|").trim(), raw);
     
-    // Xóa token cũ đi sau khi dùng thành công
-    $("accessToken").value = "";
-
+    $("accessToken").value = ""; // Xóa token sau khi dùng
   } catch (e) {
     showMsg("❌ " + e.message, "err");
   } finally {
@@ -268,7 +184,7 @@ async function run(){
 
 $("btn").addEventListener("click", run);
 
-// LOGIC ADMIN
+// === ADMIN LOGIC ===
 $("adminBtn").addEventListener("click", () => $("adminModal").classList.add("show"));
 $("adminModal").addEventListener("click", (e) => { if(e.target === $("adminModal")) $("adminModal").classList.remove("show"); });
 

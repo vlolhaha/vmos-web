@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel</title>
+<style>
+  body { font-family: -apple-system, sans-serif; background: #080d0b; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+  .card { background: #101a14; border: 1px solid #1f3428; padding: 30px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  h2 { text-align: center; color: #39f58a; margin-bottom: 20px; letter-spacing: 2px; }
+  input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #1f3428; background: #0a0e14; color: #fff; box-sizing: border-box; outline: none; font-size: 16px;}
+  input:focus { border-color: #39f58a; }
+  button { width: 100%; padding: 14px; border: none; border-radius: 8px; background: #39f58a; color: #000; font-weight: bold; cursor: pointer; font-size: 15px;}
+  button:hover { opacity: 0.9; }
+  #error { color: #ff6b81; text-align: center; margin-top: 10px; font-size: 14px; }
+  #adminPanel { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>ADMIN PANEL</h2>
+  <div id="loginPanel">
+    <input type="password" id="pinInput" placeholder="Nhập mã PIN 8 số..." maxlength="8">
+    <button onclick="login()">Đăng nhập</button>
+    <div id="error"></div>
+  </div>
+  <div id="adminPanel">
+    <p style="color: #91a096; font-size: 14px; margin-bottom: 10px;">Nhập số lượng token muốn tạo:</p>
+    <input type="number" id="tokenCount" value="1" min="1" max="500" style="text-align:center;">
+    <button onclick="generateTokens()" id="genBtn">TẠO & TẢI XUỐNG (.txt)</button>
+  </div>
+</div>
+<script>
+let adminToken = null;
+async function login() {
+  const pin = document.getElementById('pinInput').value;
+  const res = await fetch('/admin/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pin })
+  });
+  const data = await res.json();
+  if (data.success) {
+    adminToken = data.token;
+    document.getElementById('loginPanel').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+  } else {
+    document.getElementById('error').innerText = data.error;
+  }
+}
+async function generateTokens() {
+  const count = document.getElementById('tokenCount').value;
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true; btn.innerText = "ĐANG TẠO...";
+  const res = await fetch('/admin/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+    body: JSON.stringify({ count })
+  });
+  if (res.ok) {
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `tokens_${count}.txt`; a.click();
+  } else {
+    const error = await res.json(); alert(error.error);
+  }
+  btn.disabled = false; btn.innerText = "TẠO & TẢI XUỐNG (.txt)";
+}
+</script>
+</body>
+</html>
